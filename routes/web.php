@@ -13,6 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// home page
+Route::resource('/', 'GameController')->only([
+    'index', 'store'
+])->names([
+    'store' => 'start-game',
+    'index' => 'new-game'
+]);
+
+// game page & middleware for prevent player access game page before select card
+Route::get('/game', 'GameMoveController')->name('draft-card')->middleware('hasCard');
+Route::post('/game', 'GameMoveController')->name('draft-card');
